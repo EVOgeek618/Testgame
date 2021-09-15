@@ -1512,3 +1512,107 @@ style slider_vbox:
 style slider_slider:
     variant "small"
     xsize 600
+
+
+screen Inventar():
+
+    add im.FactorScale("Interface/Inventory.png",0.7) xalign 0.5 yalign 0.5
+    add im.FactorScale("Interface/Grid.png",0.7) xalign 0.5 yalign 0.45
+    for j in i.things:
+        imagebutton:
+             idle im.FactorScale(j["image"],0.7)
+             xpos j["position"][0]
+             ypos j["position"][1]
+             action SetVariable("active", j["image"])
+        if active == j["image"]:
+            imagebutton:
+             idle "Interface/Button_Yes.png"
+             xpos j["position"][0]-10
+             ypos j["position"][1]+60
+             action [SetVariable("cursor", j["image"]),Call("Change_Cursor")]
+
+screen Kit():
+    imagemap:
+        ground im.FactorScale("Location/Kitchen.jpg",1.1111)
+        hover im.FactorScale("Location/HoverKitchen.jpg",1.1111)
+
+        hotspot (1100, 0, 200, 1280) clicked Return("to_kor")
+
+    imagebutton idle im.FactorScale("Interface/Icon_Bag.png", 0.7) action ShowTransient("Inventar")
+
+    fixed:
+        xpos 600
+        $ ImegeTime = "Interface/Time_{}.png".format(t.time)
+        imagebutton idle im.FactorScale(ImegeTime,0.7) action Call("ct")
+
+
+    if t.time == "a":
+        vbox xalign 0.7 ypos 100:
+            imagebutton idle im.FactorScale("Characters/M1.png",0.7) action Call("Dialog")
+
+screen Ha():
+    imagemap:
+        ground im.FactorScale("Location/Hall.jpg",1.1111)
+        hover im.FactorScale("Location/HoverHall.jpg",1.1111)
+
+        hotspot (1000, 0, 720, 1280) clicked Return("to_kor")
+
+    fixed:
+        xpos 600
+        $ ImegeTime = "Interface/Time_{}.png".format(t.time)
+        imagebutton idle im.FactorScale(ImegeTime,0.7) action Call("ct")
+    fixed:
+        imagebutton idle im.FactorScale("Interface/Icon_Bag.png", 0.7) action ShowTransient("Inventar")
+
+    if t.time == "e":
+        vbox xalign 0.7 ypos 100:
+            imagebutton idle im.FactorScale("Characters/M1.png",0.7) action Call("Dialog")
+
+screen Rest():
+    imagemap:
+        ground im.FactorScale("Location/Restroom.jpg",1.1111)
+        hover im.FactorScale("Location/HoverRestroom.jpg",1.1111)
+
+        hotspot (0, 620, 1280, 720) clicked Return("to_kor")
+
+    fixed:
+        xpos 600
+        $ ImegeTime = "Interface/Time_{}.png".format(t.time)
+        imagebutton idle im.FactorScale(ImegeTime,0.7) action Call("ct")
+    fixed:
+        imagebutton idle im.FactorScale("Interface/Icon_Bag.png", 0.7) action ShowTransient("Inventar")
+
+    if t.time == "m":
+        vbox xalign 0.7 ypos 100:
+            imagebutton idle im.FactorScale("Characters/M1.png",0.7) action Call("Dialog")
+
+screen Kor():
+    imagemap:
+        ground im.FactorScale("Location/Korridor.jpg",1.1111)
+        hover im.FactorScale("Location/HoverKorridor.jpg",1.1111)
+
+        hotspot (777, 222, 111, 333) clicked Return("to_bath")
+        hotspot (1111, 0, 500, 1000) clicked Return("to_hall")
+        hotspot (0, 0, 222, 1000) clicked Return("to_kitchen")
+
+    fixed:
+        xpos 600
+        $ ImegeTime = "Interface/Time_{}.png".format(t.time)
+        imagebutton idle im.FactorScale(ImegeTime,0.7) action Call("ct")
+    fixed:
+        imagebutton idle im.FactorScale("Interface/Icon_Bag.png", 0.7) action ShowTransient("Inventar")
+
+label Change_Cursor:
+    $ change_cursor(im.FactorScale(cursor,0.3)); active = None
+    return
+
+label ct:
+    $ t.change_time()
+    return
+
+label Dialog:
+    "Привет."
+    m"Рада тебя видеть."
+    "Хорошего дня."
+    m"И тебе того же."
+    return
