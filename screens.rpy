@@ -1616,3 +1616,95 @@ label Dialog:
     "Хорошего дня."
     m"И тебе того же."
     return
+init python:
+    otmychka_position = 0
+    num = []
+    blocks_position1 = 50
+    blocks_position2 = 100
+    blocks_position3 = 50
+    blocks_position4 = 0
+    blocks_position5 = 100
+    blocks_position6 = 0
+    do = 300
+init:
+    transform otmychka_move(posi, do):
+        subpixel True
+        pos(posi,do)
+    transform shtift(num,set):
+        subpixel True
+        pos((num*150)+300,500-set)
+screen minigame:
+
+    add im.FactorScale("Mini-game/Фон_Замка.png", 0.93) align(0.45,0.575)
+    add im.FactorScale("Mini-game/Отмычка.png", 0.93) at otmychka_move(otmychka_position-1000, do)
+    add im.FactorScale("Mini-game/Штифт .png", 0.93) as stift1 at shtift(0, blocks_position1)
+    add im.FactorScale("Mini-game/Штифт .png", 0.93) as stift2 at shtift(1, blocks_position2)
+    add im.FactorScale("Mini-game/Штифт .png", 0.93) as stift3 at shtift(2, blocks_position3)
+    add im.FactorScale("Mini-game/Штифт .png", 0.93) as stift4 at shtift(3, blocks_position4)
+    add im.FactorScale("Mini-game/Штифт .png", 0.93) as stift5 at shtift(4, blocks_position5)
+    add im.FactorScale("Mini-game/Штифт .png", 0.93) as stift6 at shtift(5, blocks_position6)
+    add im.FactorScale("Mini-game/Замок.png", 0.93)
+    if otmychka_position >= 10 and otmychka_position <= 118 and blocks_position1 != 0:
+        key "K_SPACE" action [Hide("otmychka_move_left"), Hide("otmychka_move_right"),Show("otmychka_down1")]
+    if otmychka_position >= 160 and otmychka_position <= 268 and blocks_position2 != 0:
+        key "K_SPACE" action [Hide("otmychka_move_left"), Hide("otmychka_move_right"),Show("otmychka_down2")]
+    if otmychka_position >= 310 and otmychka_position <= 418 and blocks_position3 != 0:
+        key "K_SPACE" action [Hide("otmychka_move_left"), Hide("otmychka_move_right"),Show("otmychka_down3")]
+    if otmychka_position >= 460 and otmychka_position <= 568 and blocks_position4 != 0:
+        key "K_SPACE" action [Hide("otmychka_move_left"), Hide("otmychka_move_right"),Show("otmychka_down4")]
+    if otmychka_position >= 610 and otmychka_position <= 718 and blocks_position5 != 0:
+        key "K_SPACE" action [Hide("otmychka_move_left"), Hide("otmychka_move_right"),Show("otmychka_down5")]
+    if otmychka_position >= 760 and otmychka_position <= 818 and blocks_position6 != 0:
+        key "K_SPACE" action [Hide("otmychka_move_left"), Hide("otmychka_move_right"),Show("otmychka_down6")]
+    if blocks_position1+blocks_position2+blocks_position3+blocks_position4+blocks_position5+blocks_position6 == 0 and do == 300:
+        timer 0.01 action [Hide("otmychka_move_right"),Hide("otmychka_up"),Jump("Rest")]
+
+
+    $ config.mouse_displayable = None
+
+screen otmychka_move_right:
+    timer 0.001 repeat True action [If(otmychka_position <= 900, SetVariable("otmychka_position", otmychka_position + 10)),If(otmychka_position == 900, Hide("otmychka_move_right"), Show("otmychka_move_left"))]
+
+screen otmychka_move_left:
+    timer 0.001 repeat True action [If(otmychka_position >= 0, SetVariable("otmychka_position", otmychka_position - 10)),If(otmychka_position == 0, Hide("otmychka_move_left"), Show("otmychka_move_right"))]
+
+screen otmychka_up:
+    timer 0.01 repeat True action If(do >300 , SetVariable("do", do-5), [Show("otmychka_move_right"),Hide("otmychka_up")])
+
+screen otmychka_down1:
+    timer 0.01 repeat True action If(do < 450 - blocks_position1 , SetVariable("do", do+5), [Show("stift_down1"),Hide("otmychka_down1")])
+
+screen stift_down1:
+    timer 0.01 repeat True action [If(blocks_position1 > 0, [SetVariable("blocks_position1", blocks_position1 - 5),SetVariable("do", do + 5)],[Show("otmychka_up"), Hide("stift_down1")])]
+
+screen otmychka_down2:
+    timer 0.01 repeat True action If(do < 450 - blocks_position2 , SetVariable("do", do+5), [Show("stift_down2"),Hide("otmychka_down2")])
+
+screen stift_down2:
+    timer 0.01 repeat True action [If(blocks_position2 > 0, [SetVariable("blocks_position2", blocks_position2 - 5),SetVariable("do", do + 5)],[Show("otmychka_up"), Hide("stift_down2")])]
+
+screen otmychka_down3:
+    timer 0.01 repeat True action If(do < 450 - blocks_position3 , SetVariable("do", do+5), [Show("stift_down3"),Hide("otmychka_down3")])
+
+screen stift_down3:
+    timer 0.01 repeat True action [If(blocks_position3 > 0, [SetVariable("blocks_position3", blocks_position3 - 5),SetVariable("do", do + 5)],[Show("otmychka_up"), Hide("stift_down3")])]
+
+screen otmychka_down4:
+    timer 0.01 repeat True action If(do < 450 - blocks_position4 , SetVariable("do", do+5), [Show("stift_down4"),Hide("otmychka_down4")])
+
+screen stift_down4:
+    timer 0.01 repeat True action [If(blocks_position4 > 0, [SetVariable("blocks_position4", blocks_position4 - 5),SetVariable("do", do + 5)],[Show("otmychka_up"), Hide("stift_down4")])]
+
+screen otmychka_down5:
+    timer 0.01 repeat True action If(do < 450 - blocks_position5 , SetVariable("do", do+5), [Show("stift_down5"),Hide("otmychka_down5")])
+
+screen stift_down5:
+    timer 0.01 repeat True action [If(blocks_position5 > 0, [SetVariable("blocks_position5", blocks_position5 - 5),SetVariable("do", do + 5)],[Show("otmychka_up"), Hide("stift_down5")])]
+
+screen otmychka_down6:
+    timer 0.01 repeat True action If(do < 450 - blocks_position6 , SetVariable("do", do+5), [Show("stift_down6"),Hide("otmychka_down6")])
+
+screen stift_down6:
+    timer 0.01 repeat True action [If(blocks_position6 > 0, [SetVariable("blocks_position6", blocks_position6 - 5),SetVariable("do", do + 5)],[Show("otmychka_up"), Hide("stift_down6")])]
+
+

@@ -58,8 +58,22 @@ label Choise:
 
     $ choise = _return
 
-    if (choise == "to_bath" and t.time != "m") or (choise == "to_bath" and t.time == "m" and cursor=="Interface/Отмычка_Икон.png"):
+    if (choise == "to_bath" and t.time != "m") or (choise == "to_bath" and t.time == "m"
+    and blocks_position1+blocks_position2+blocks_position3+blocks_position4+blocks_position5+blocks_position6 == 0):
         jump Rest
+    elif (choise == "to_bath" and t.time == "m" and cursor=="Interface/Отмычка_Икон.png"):
+        show screen otmychka_move_right
+        python:
+            otmychka_position = 0
+            num = []
+            blocks_position1 = 50
+            blocks_position2 = 100
+            blocks_position3 = 50
+            blocks_position4 = 0
+            blocks_position5 = 100
+            blocks_position6 = 0
+            do = 300
+        call screen minigame
     elif choise == "to_bath" and t.time == "m":
         "Мама заперлась изнутри"
         scene Korridor
